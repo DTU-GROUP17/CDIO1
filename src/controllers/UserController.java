@@ -1,5 +1,6 @@
 package controllers;
 
+import dal.DALException;
 import dal.NotConnectedException;
 import dal.NotFoundException;
 import dal.UserDAO;
@@ -16,7 +17,7 @@ public class UserController {
 		this.userDAO = userDAO;
 	}
 
-	void showUser(int userId) {
+	void showUser(int userId) throws DALException {
 		try {
 			this.ui.showUser(this.userDAO.findUser(userId));
 		} catch (NotFoundException e) {

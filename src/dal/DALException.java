@@ -14,8 +14,10 @@ public class DALException extends Exception {
 
 	@Override
 	public void printStackTrace() {
-		e.printStackTrace();
+		this.e.printStackTrace();
 	}
+	
+	 
 	
 	
 
