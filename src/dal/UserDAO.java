@@ -7,8 +7,8 @@ import models.User;
 
 public interface UserDAO {
 
-	User findUser(int userId) throws NotFoundException, NotConnectedException, DALException, SQLException;
-	List<User> getUsers() throws NotConnectedException;
+	User findUser(int userId) throws NotFoundException, NotConnectedException, DALException;
+	List<User> getUsers() throws NotConnectedException, DALException;
 	void createUser(User user) throws NotConnectedException;
 	void updateUser(User user) throws NotFoundException, NotConnectedException;
 	void deleteUser(int userId) throws NotFoundException, NotConnectedException;

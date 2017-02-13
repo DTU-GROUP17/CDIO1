@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -58,7 +59,25 @@ public class JDBCUserDAO implements UserDAO {
 
 	@Override
 	public List<User> getUsers() throws DALException {
-		return null;
+		
+		try {
+		List<User> brugere = new LinkedList<User>();
+		ResultSet rs = s.executeQuery("SELECT * FROM personer");
+		this.userId = rs.getInt(1);
+		this.username = rs.getString(2);
+		this.initials = rs.getString(3);
+		this.cpr = rs.getString(4);
+		this.password = rs.getString(5);
+		this.roles.add(rs.getString(6));
+		
+		User user = new User(this.userId, this.username, this.initials, this.cpr, this.password, this.roles);
+		brugere.add(1, user);
+		
+		return brugere;
+		} catch (SQLException e) {
+			throw new DALException(e);
+		}
+		
 	}
 
 	@Override
