@@ -4,14 +4,14 @@ import java.util.List;
 
 public class User {
 
-	private int	userId;                     
+	private Integer	userId;
 	private String userName;                
 	private String initials;
 	private String cpr;
 	private String password;
 	private List<String> roles;
 
-	public User(int userId, String userName, String initials, String cpr, String password, List<String> roles) {
+	public User(Integer userId, String userName, String initials, String cpr, String password, List<String> roles){
 		this.userId = userId;
 		this.userName = userName;
 		this.initials = initials;
@@ -20,8 +20,12 @@ public class User {
 		this.roles = roles;
 	}
 
+	public User(String userName, String initials, String cpr, String password, List<String> roles) {
+		this(null, userName, initials, cpr, password, roles);
+	}
+
 	public int getUserId() {
-		return userId;
+		return this.userId;
 	}
 
 	public void setUserId(int userId) {

@@ -16,7 +16,7 @@ public class UserController {
 		this.userDAO = userDAO;
 	}
 
-	void showUser(int userId) {
+	public void showUser(int userId) {
 		try {
 			this.ui.showUser(this.userDAO.findUser(userId));
 		} catch (NotFoundException e) {
@@ -26,7 +26,7 @@ public class UserController {
 		}
 	}
 
-	void showUsers() {
+	public void showUsers() {
 		try {
 			this.ui.showUsers(this.userDAO.getUsers());
 		} catch (NotConnectedException e) {
@@ -34,7 +34,7 @@ public class UserController {
 		}
 	}
 
-	void createUser(User user) {
+	public void createUser(User user) {
 		try {
 			this.userDAO.createUser(user);
 		} catch (NotConnectedException e) {
@@ -42,7 +42,7 @@ public class UserController {
 		}
 	}
 
-	void updateUser(User user) {
+	public void updateUser(User user) {
 		try {
 			this.userDAO.updateUser(user);
 		} catch (NotFoundException e) {
