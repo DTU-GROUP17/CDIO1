@@ -15,13 +15,20 @@ public class JDBCUserDAO implements UserDAO {
 
 	private Connection con;
 	private Statement s;
+	PreparedStatement p;
 	int userId;
 	String username, initials, cpr, password;
 	private List<String> roles;
 
 	public JDBCUserDAO(boolean opretDB) throws DALException {
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			//register the driver and load into the memory
+			//makes the driver registration portable.
+			Class.forName("com.mysql.jdbc.Driver").newInstance(); 
+			
+			//had to use this, to get rid of eclipse complaining about security issues.
+			//so SSL is on, no sniffing passwords on my watch!.
+			//verifyServerCertificate=false&useSSL=true
 			con = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/3lm?verifyServerCertificate=false&useSSL=true", "root", "");
 			s = con.createStatement();
@@ -37,7 +44,10 @@ public class JDBCUserDAO implements UserDAO {
 			throw new DALException(e);
 		}
 	}
-
+	
+	
+	//unsure if it works. Must test it to see if i can find users repeatedly
+	//maybe some clear is needed for the roles at the end.
 	@Override
 	public User findUser(int userId) throws DALException {
 		try {
@@ -86,7 +96,29 @@ public class JDBCUserDAO implements UserDAO {
 
 	@Override
 	public void createUser(User user) throws DALException {
-
+		try {
+		this.userId = user.getUserId();
+		this.username = user.getUserName();
+		this.initials = user.getInitials();
+		this.cpr = user.getCpr();
+		this.password = user.getPassword();
+		this.roles = user.getRoles();
+		
+		String insertTableSQL = "INSERT INTO 3lm" 
+				+ "(userId, username, initials, cpr, password, roles) VALUES" 
+				+ "(?,?,?,?,?,?)";
+		p = con.prepareStatement(insertTableSQL);
+		p.setInt(1, this.userId);
+		p.setString(2, this.username);
+		p.setString(3, this.initials);
+		p.setString(4, this.cpr);
+		p.setString(5, this.password);
+		p.setString(6, this.roles);
+		p.setArray(6, this.roles);
+		
+		} catch (SQLException e) {
+			throw new DALException(e);
+		}
 	}
 
 	@Override
