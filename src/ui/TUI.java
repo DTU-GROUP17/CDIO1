@@ -2,12 +2,15 @@ package ui;
 
 import java.util.List;
 import java.util.Scanner;
-
 import controllers.UserController;
 import models.User;
 
+
+
 public class TUI implements UI{
-		
+	
+	
+	
 	Scanner input;
 	User user;
 	String cpr;
@@ -28,7 +31,8 @@ public class TUI implements UI{
 			int valg = input.nextInt();
 			
 			switch (valg) {
-				case 1: break;
+				case 1: 
+						break;
 				case 2: break;
 				case 3: break;
 				case 4: break;
@@ -69,7 +73,6 @@ public class TUI implements UI{
 		@Override
 		public void showUsers(List<User> user) {
 			// TODO Auto-generated method stub
-			
 		}
 
 	}
