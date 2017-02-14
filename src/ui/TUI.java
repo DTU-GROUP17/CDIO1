@@ -8,17 +8,34 @@ import models.User;
 
 public class TUI implements UI{
 		
-	Scanner tastatur;
+	Scanner input;
+	User user;
 	String cpr;
 	String uid;
 		
 		public TUI() {
-			tastatur = new Scanner(System.in);
-			cpr = null;
-			uid = null;
+			input = new Scanner(System.in);
+
 		}
 		
 		public void dialog() {
+			
+			System.out.println("1: Opret bruger");
+			System.out.println("2: Vis brugere");
+			System.out.println("3: Opdater bruger");
+			System.out.println("4: Slet brugere");
+			
+			int valg = input.nextInt();
+			
+			switch (valg) {
+				case 1: break;
+				case 2: break;
+				case 3: break;
+				case 4: break;
+				
+			}
+			
+			
 			
 		}
 			
@@ -31,13 +48,21 @@ public class TUI implements UI{
 
 		@Override
 		public void showMessage(String message) {
-			// TODO Auto-generated method stub
+			System.out.println(message);
 			
 		}
 
 		@Override
 		public void showUser(User user) {
-			// TODO Auto-generated method stub
+			
+			int userId = user.getUserId();
+			String username = user.getUserName();
+			String initials = user.getInitials();
+			String cpr = user.getCpr();
+			String password = user.getPassword();
+			String roles = user.getRoles().toString();
+			
+			
 			
 		}
 
@@ -51,4 +76,4 @@ public class TUI implements UI{
 
 	
 	
-}
+
