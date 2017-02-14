@@ -12,10 +12,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class JDBCUserDAO implements UserDAO {
-
+	
+	private String db;
+	private String tbl;
 	private Connection con;
-	PreparedStatement p;
-	ResultSet rs;
+	private PreparedStatement p;
+	private ResultSet rs;
 
 	int userId;
 	String username, initials, cpr, password;
@@ -26,17 +28,18 @@ public class JDBCUserDAO implements UserDAO {
 			// register the driver and load into the memory
 			// makes the driver registration portable.
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-
+			db = "3lm";
+			tbl = "personer";
 			// had to use this, to get rid of eclipse complaining about security
 			// issues.
 			// so SSL is on, no sniffing passwords on my watch!.
 			// verifyServerCertificate=false&useSSL=true
 			con = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/3lm?verifyServerCertificate=false&useSSL=true", "root", "");
+					"jdbc:mysql://localhost:3306/" + db + "?verifyServerCertificate=false&useSSL=true", "root", "");
 
 			if (opretDB) {
 
-				String createTableSQL = "CREATE TABLE personer (userID INT(2) AUTO_INCREMENT=10,userName VARCHAR(20), ini VARCHAR(4),cpr INT(11), String VARCHAR(30), roles (varchar(20))";
+				String createTableSQL = "CREATE TABLE " + tbl + "(userID INT(2) AUTO_INCREMENT=10,userName VARCHAR(20), ini VARCHAR(4),cpr INT(11), String VARCHAR(30), roles (varchar(20))";
 				String insertIntoSQL1 = "INSERT INTO personer VALUES ('Henrik Ulriksen', '346543-2745'))";
 				String insertIntoSQL2 = "INSERT INTO personer VALUES ('Ole Hansen', '374563-0935'))";
 				String insertIntoSQL3 = "INSERT INTO personer VALUES ('Lene Ulriksen', '284562-8375'))";
@@ -101,10 +104,10 @@ public class JDBCUserDAO implements UserDAO {
 				this.cpr = rs.getString(4);
 				this.password = rs.getString(5);
 				this.roles.add(rs.getString(6));
-
+			}
 				User user = new User(this.userId, this.username, this.initials, this.cpr, this.password, this.roles);
 				brugere.add(user);
-			}
+			
 			return brugere;
 
 		} catch (SQLException e) {
@@ -143,12 +146,45 @@ public class JDBCUserDAO implements UserDAO {
 
 	@Override
 	public void updateUser(User user) throws DALException {
+		try {
+		this.userId = user.getUserId();
+		this.username = user.getUserName();
+		this.initials = user.getInitials();
+		this.cpr = user.getCpr();
+		this.password = user.getPassword();
+		this.roles = user.getRoles();
+		this.roles.toArray();
+		
+		String updateStatement ="UPDATE " + tbl + " SET userId=?, username=?, initials=?, cpr=?, password=?, roles=?"
+				+ " WHERE userId=?";
+		p = con.prepareStatement(updateStatement);
+		p.setInt(1, this.userId);
+		p.setString(2, this.username);
+		p.setString(3, this.initials);
+		p.setString(4, this.cpr);
+		p.setString(5, this.password);
+		p.setString(6, this.roles.get(0));
+		p.executeQuery();
+		} catch (SQLException e) {
+			throw new DALException(e);
+		}
+
+		
+		
 
 	}
 
 	@Override
-	public void deleteUser(int userId) throws DALException {
-
+	public void deleteUser(int userId) throws DALException{
+		try {
+		String deleteStatement = "DELETE FROM " + tbl + " WHERE userId=?";
+		p = con.prepareStatement(deleteStatement);
+		p.setInt(1, userId);
+		p.executeQuery();
+	}	
+	 catch (SQLException e) {
+		
+			throw new DALException(e);
 	}
-
+	}
 }
