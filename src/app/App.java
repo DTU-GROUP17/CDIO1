@@ -19,9 +19,9 @@ public class App {
 	}
 
 	public void start() {
-		String choice;
+		
 		do {
-			choice =
+			ui.dialog();
 		} while (true);
 	}
 

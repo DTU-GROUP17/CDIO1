@@ -17,7 +17,7 @@ public class UserController {
 		this.userDAO = userDAO;
 	}
 
-	void showUser(int userId) throws DALException {
+	public void showUser(int userId) throws DALException {
 		try {
 			this.ui.showUser(this.userDAO.findUser(userId));
 		} catch (NotFoundException e) {
@@ -27,7 +27,7 @@ public class UserController {
 		}
 	}
 
-	void showUsers() throws DALException {
+	public void showUsers() throws DALException {
 		try {
 			this.ui.showUsers(this.userDAO.getUsers());
 		} catch (NotConnectedException e) {
@@ -35,7 +35,7 @@ public class UserController {
 		}
 	}
 
-	void createUser(User user) throws DALException {
+	public void createUser(User user) throws DALException {
 		try {
 			this.userDAO.createUser(user);
 		} catch (NotConnectedException e) {
@@ -43,7 +43,7 @@ public class UserController {
 		}
 	}
 
-	void updateUser(User user) throws DALException {
+	public void updateUser(User user) throws DALException {
 		try {
 			this.userDAO.updateUser(user);
 		} catch (NotFoundException e) {

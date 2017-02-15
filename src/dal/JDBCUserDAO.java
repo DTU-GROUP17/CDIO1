@@ -128,7 +128,7 @@ public class JDBCUserDAO implements UserDAO {
 
 			this.roles.toArray();
 
-			String insertTableSQL = "INSERT INTO 3lm" + "(userId, username, initials, cpr, password, roles) VALUES"
+			String insertTableSQL = "INSERT INTO " + tbl + "(userId, username, initials, cpr, password, roles) VALUES"
 					+ "(?,?,?,?,?,?)";
 			p = con.prepareStatement(insertTableSQL);
 			p.setInt(1, this.userId);

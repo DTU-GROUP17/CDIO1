@@ -10,5 +10,6 @@ public interface UI {
 	void showMessage(String message);
 	void showUser(User user);
 	void showUsers(List<User> user);
+	void dialog();
 
 }

@@ -1,7 +1,9 @@
 package ui;
 
+import java.io.Console;
 import java.util.List;
 import java.util.Scanner;
+
 import controllers.UserController;
 import models.User;
 
@@ -10,14 +12,16 @@ import models.User;
 public class TUI implements UI{
 	
 	
-	
+	UserController ctrl;
 	Scanner input;
+	Console console;
 	User user;
 	String cpr;
 	String uid;
 		
 		public TUI() {
 			input = new Scanner(System.in);
+			console = System.console();
 
 		}
 		
@@ -31,7 +35,7 @@ public class TUI implements UI{
 			int valg = input.nextInt();
 			
 			switch (valg) {
-				case 1: 
+				case 1: createUser();
 						break;
 				case 2: break;
 				case 3: break;
@@ -44,10 +48,29 @@ public class TUI implements UI{
 		}
 			
 
+		private void createUser() {
+			
+			System.out.println("Indtast userId");
+			int userId = input.nextInt();
+			System.out.println("Indtast brugernavn");
+			String userName = input.nextLine();
+			System.out.println("Indtast initialer");
+			String initials = input.nextLine();
+			System.out.println("Indtast cpr");
+			String cpr = input.nextLine();
+			System.out.println("Indtast password");
+			char[] passwordString = console.readPassword();
+			String password = new String(passwordString);
+			List<String> roles 
+			
+			
+			
+			User bruger = new User(userId, userName, initials, password, cpr, tc, );
+		}
+		
 		@Override
 		public String getString(String message) {
-			// TODO Auto-generated method stub
-			return null;
+
 		}
 
 		@Override
