@@ -67,7 +67,7 @@ public class JDBCUserDAO implements UserDAO {
 	}
 
 	@Override
-	public User findUser(int userId) throws DALException {
+	public User findUser(int userId) throws NotFoundException, NotConnectedException {
 		try {
 			String selectStatement = ("SELECT userId, username, initials, cpr, password, roles FROM personer WHERE userId = "
 					+ userId);
@@ -84,12 +84,12 @@ public class JDBCUserDAO implements UserDAO {
 			User user = new User(this.userId, this.username, this.initials, this.cpr, this.password, this.roles);
 			return user;
 		} catch (SQLException e) {
-			throw new DALException(e);
+			throw new NotConnectedException();
 		} 
 	}
 
 	@Override
-	public List<User> getUsers() throws DALException {
+	public List<User> getUsers() throws NotConnectedException {
 
 		try {
 			List<User> brugere = new LinkedList<User>();
@@ -111,13 +111,13 @@ public class JDBCUserDAO implements UserDAO {
 			return brugere;
 
 		} catch (SQLException e) {
-			throw new DALException(e);
+			throw new NotConnectedException();
 		}
 
 	}
 
 	@Override
-	public void createUser(User user) throws DALException {
+	public void createUser(User user) throws NotConnectedException {
 		try {
 			this.userId = user.getUserId();
 			this.username = user.getUserName();
@@ -140,12 +140,12 @@ public class JDBCUserDAO implements UserDAO {
 			p.executeQuery();
 
 		} catch (SQLException e) {
-			throw new DALException(e);
+			throw new NotConnectedException();
 		}
 	}
 
 	@Override
-	public void updateUser(User user) throws DALException {
+	public void updateUser(User user) throws NotFoundException, NotConnectedException {
 		try {
 		this.userId = user.getUserId();
 		this.username = user.getUserName();
@@ -166,7 +166,7 @@ public class JDBCUserDAO implements UserDAO {
 		p.setString(6, this.roles.get(0));
 		p.executeQuery();
 		} catch (SQLException e) {
-			throw new DALException(e);
+			throw new NotConnectedException();
 		}
 
 		
@@ -175,7 +175,7 @@ public class JDBCUserDAO implements UserDAO {
 	}
 
 	@Override
-	public void deleteUser(int userId) throws DALException{
+	public void deleteUser(int userId) throws NotFoundException, NotConnectedException{
 		try {
 		String deleteStatement = "DELETE FROM " + tbl + " WHERE userId=?";
 		p = con.prepareStatement(deleteStatement);
@@ -184,7 +184,7 @@ public class JDBCUserDAO implements UserDAO {
 	}	
 	 catch (SQLException e) {
 		
-			throw new DALException(e);
+			throw new NotConnectedException();
 	}
 	}
 }

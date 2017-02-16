@@ -3,6 +3,10 @@ package dal;
 public class DALException extends Exception {
 	private Exception e;
 
+	public DALException(){
+		super();
+	}
+
 	public DALException(String msg) {
 		super(msg);
 	}
