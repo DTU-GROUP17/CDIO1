@@ -6,6 +6,7 @@ import dal.UserDAO;
 import models.User;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,32 +18,47 @@ public class JDBCUserDAO implements UserDAO {
 		this.connection = connection;
 	}
 
-	private List<String> getRolesForUser(int userID){
-		String query =
-			"SELECT roles.name" +
-			" FROM" +
-				"roles_users" +
+	private List<String> getUserRoles(int userID) throws NotFoundException, NotConnectedException{
+		try {
+			String query =
+				"SELECT roles.name" +
+				"FROM roles_users" +
 				"INNER JOIN roles" +
-				"ON roles.id = roles_users.role_id" +
-				" WHERE roles_users.user_id=?";
+					"ON roles.id = roles_users.role_id" +
+				"WHERE roles_users.user_id=?";
+			ResultSet results = connection.prepareStatement(query).executeQuery();
+			List<String> roles = new ArrayList<>();
+			while (results.next()){
+				roles.add(results.getString(0));
+			}
+			return roles;
+		} catch (SQLException e) {
+			throw new NotConnectedException();
+		}
 	}
 
 	@Override
 	public User findUser(int userId) throws NotFoundException, NotConnectedException {
 		try {
-			String query = ("SELECT userId, username, initials, cpr, password FROM personer WHERE userId = "
-					+ userId);
+			String query =
+				"SELECT " +
+					"id," +
+					"name," +
+					"ini," +
+					"cpr," +
+					"password" +
+				"FROM users" +
+				"WHERE id = " + userId;
 			ResultSet results = connection.prepareStatement(query).executeQuery();
-			
-			this.userId = results.getInt(1);
-			this.username = results.getString(2);
-			this.initials = results.getString(3);
-			this.cpr = results.getString(4);
-			this.password = results.getString(5);
-			this.roles.add(results.getString(6));
-
-			User user = new User(this.userId, this.username, this.initials, this.cpr, this.password, this.roles);
-			return user;
+			int id = results.getInt(0);
+			return new User(
+				id,
+				results.getString(1),
+				results.getString(2),
+				results.getString(3),
+				results.getString(4),
+				this.getUserRoles(id)
+			);
 		} catch (SQLException e) {
 			throw new NotConnectedException();
 		} 
@@ -51,22 +67,31 @@ public class JDBCUserDAO implements UserDAO {
 	@Override
 	public List<User> getUsers() throws NotConnectedException {
 		try {
-			List<User> brugere = new LinkedList<>();
-			String selectStatement = "SELECT * FROM personer";
-			statement = connection.prepareStatement(selectStatement);
-			results = statement.executeQuery();
+			List<User> users = new ArrayList<>();
+			String query =
+				"SELECT " +
+					"id," +
+					"name," +
+					"ini," +
+					"cpr," +
+					"password" +
+				"FROM users";
+			ResultSet results = connection.prepareStatement(query).executeQuery();
 			while (results.next()) {
-				this.userId = results.getInt(1);
-				this.username = results.getString(2);
-				this.initials = results.getString(3);
-				this.cpr = results.getString(4);
-				this.password = results.getString(5);
-				this.roles.add(results.getString(6));
+				int id = results.getInt(0);
+				users.add(
+					new User(
+						id,
+						results.getString(1),
+						results.getString(2),
+						results.getString(3),
+						results.getString(4),
+						this.getUserRoles(id)
+					)
+				);
 			}
-			User user = new User(this.userId, this.username, this.initials, this.cpr, this.password, this.roles);
-			brugere.add(user);
-			return brugere;
-		} catch (SQLException e) {
+			return users;
+		} catch (SQLException | NotFoundException e) {
 			throw new NotConnectedException();
 		}
 	}
