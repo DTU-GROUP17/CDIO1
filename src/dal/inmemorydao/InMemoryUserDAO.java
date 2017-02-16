@@ -1,5 +1,8 @@
-package dal;
+package dal.inmemorydao;
 
+import dal.UserDAO;
+import dal.exceptions.NotFoundException;
+import dal.exceptions.NotConnectedException;
 import models.User;
 
 import java.util.ArrayList;

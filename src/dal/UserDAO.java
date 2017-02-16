@@ -3,6 +3,8 @@ package dal;
 
 import java.util.List;
 
+import dal.exceptions.NotConnectedException;
+import dal.exceptions.NotFoundException;
 import models.User;
 
 public interface UserDAO {

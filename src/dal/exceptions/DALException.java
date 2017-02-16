@@ -1,6 +1,6 @@
-package dal;
+package dal.exceptions;
 
-public class DALException extends Exception {
+public abstract class DALException extends Exception {
 	private Exception e;
 
 	public DALException(){

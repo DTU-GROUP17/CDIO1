@@ -1,10 +1,10 @@
 package app;
 
-import app.Actions.Action;
-import app.Actions.CreateUser;
-import app.Actions.ViewUsers;
+import app.actions.Action;
+import app.actions.CreateUser;
+import app.actions.ViewUsers;
 import controllers.UserController;
-import dal.JDBCUserDAO;
+import dal.DAO;
 import dal.UserDAO;
 import ui.UI;
 
@@ -16,11 +16,11 @@ public class App {
 	private UserController userController;
 	private Hashtable<String, Action> actions;
 
-	public App(UI ui, UserDAO userDAO) {
+	public App(UI ui, DAO dao) {
 		this.ui = ui;
 		this.userController = new UserController(
 				this.ui,
-				userDAO
+				dao.getUserDAO()
 		);
 		this.actions = new Hashtable<>();
 		this.actions.put("Create user", new CreateUser(this));

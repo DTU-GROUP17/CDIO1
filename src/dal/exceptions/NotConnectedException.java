@@ -1,4 +1,4 @@
-package dal;
+package dal.exceptions;
 
 public class NotConnectedException extends DALException {
 

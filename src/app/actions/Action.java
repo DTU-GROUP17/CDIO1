@@ -1,4 +1,4 @@
-package app.Actions;
+package app.actions;
 
 import app.App;
 
