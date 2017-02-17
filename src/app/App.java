@@ -2,6 +2,7 @@ package app;
 
 import app.actions.Action;
 import app.actions.CreateUser;
+import app.actions.DeleteUser;
 import app.actions.ViewUsers;
 import controllers.UserController;
 import dal.DAO;
@@ -25,6 +26,7 @@ public class App {
 		this.actions = new Hashtable<>();
 		this.actions.put("Create user", new CreateUser(this));
 		this.actions.put("View users", new ViewUsers(this));
+		this.actions.put("Delete user", new DeleteUser(this));
 	}
 
 	private void chooseAction(String actionKey){

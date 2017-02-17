@@ -20,6 +20,12 @@ public class TUI implements UI {
 	}
 
 	@Override
+	public int getInt(String message) {
+		System.out.print(message+": ");
+		return this.scanner.nextInt();
+	}
+
+	@Override
 	public void showMessage(String message) {
 		System.out.println(message);
 	}

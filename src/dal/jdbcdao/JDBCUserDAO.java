@@ -1,35 +1,39 @@
 package dal.jdbcdao;
 
+import dal.UserDAO;
 import dal.exceptions.NotConnectedException;
 import dal.exceptions.NotFoundException;
-import dal.UserDAO;
 import models.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class JDBCUserDAO implements UserDAO {
 
-	private Connection connection;
+	private JDBCDAO parent;
 
-	public JDBCUserDAO(Connection connection){
-		this.connection = connection;
+	public JDBCUserDAO(JDBCDAO parent){
+		this.parent = parent;
 	}
 
 	private List<String> getUserRoles(int userID) throws NotFoundException, NotConnectedException{
 		try {
 			String query =
-				"SELECT roles.name" +
-				"FROM roles_users" +
-				"INNER JOIN roles" +
-					"ON roles.id = roles_users.role_id" +
+				"SELECT roles.name " +
+				"FROM roles_users " +
+				"INNER JOIN roles " +
+					"ON roles.id = roles_users.role_id " +
 				"WHERE roles_users.user_id=?";
-			ResultSet results = connection.prepareStatement(query).executeQuery();
+			PreparedStatement statement = this.parent.getConnection().prepareStatement(query);
+			statement.setInt(1, userID);
+			ResultSet results = statement.executeQuery();
 			List<String> roles = new ArrayList<>();
 			while (results.next()){
-				roles.add(results.getString(0));
+				roles.add(results.getString(1));
 			}
 			return roles;
 		} catch (SQLException e) {
@@ -49,7 +53,7 @@ public class JDBCUserDAO implements UserDAO {
 					"password" +
 				"FROM users" +
 				"WHERE id = " + userId;
-			ResultSet results = connection.prepareStatement(query).executeQuery();
+			ResultSet results = this.parent.getConnection().prepareStatement(query).executeQuery();
 			int id = results.getInt(0);
 			return new User(
 				id,
@@ -66,59 +70,54 @@ public class JDBCUserDAO implements UserDAO {
 
 	@Override
 	public List<User> getUsers() throws NotConnectedException {
+		List<User> users = new ArrayList<>();
 		try {
-			List<User> users = new ArrayList<>();
 			String query =
 				"SELECT " +
 					"id," +
 					"name," +
 					"ini," +
 					"cpr," +
-					"password" +
+					"psswrd " +
 				"FROM users";
-			ResultSet results = connection.prepareStatement(query).executeQuery();
+			ResultSet results = this.parent.getConnection().prepareStatement(query).executeQuery();
 			while (results.next()) {
-				int id = results.getInt(0);
+				int id = results.getInt(1);
 				users.add(
 					new User(
 						id,
-						results.getString(1),
 						results.getString(2),
 						results.getString(3),
 						results.getString(4),
+						results.getString(5),
 						this.getUserRoles(id)
 					)
 				);
 			}
-			return users;
 		} catch (SQLException | NotFoundException e) {
 			throw new NotConnectedException();
 		}
+		return users;
 	}
 
 	@Override
 	public void createUser(User user) throws NotConnectedException {
 		try {
-			this.userId = user.getUserId();
-			this.username = user.getUserName();
-			this.initials = user.getInitials();
-			this.cpr = user.getCpr();
-			this.password = user.getPassword();
-			this.roles = user.getRoles();
-
-			this.roles.toArray();
-
-			String insertTableSQL = "INSERT INTO " + tabel + "(userId, username, initials, cpr, password, roles) VALUES"
-					+ "(?,?,?,?,?,?)";
-			statement = connection.prepareStatement(insertTableSQL);
-			statement.setInt(1, this.userId);
-			statement.setString(2, this.username);
-			statement.setString(3, this.initials);
-			statement.setString(4, this.cpr);
-			statement.setString(5, this.password);
-			statement.setString(6, this.roles.get(0));
-			statement.executeQuery();
-
+			String query =
+				"INSERT INTO users (" +
+					"name, " +
+					"ini, " +
+					"cpr, " +
+					"psswrd" +
+				") " +
+				"VALUES (?,?,?,?)";
+			PreparedStatement statement = this.parent.getConnection().prepareStatement(query);
+			statement.setString(1, user.getUserName());
+			statement.setString(2, user.getInitials());
+			statement.setString(3, user.getCpr());
+			statement.setString(4, user.getPassword());
+			statement.execute();
+			//TODO add roles
 		} catch (SQLException e) {
 			throw new NotConnectedException();
 		}
@@ -127,23 +126,14 @@ public class JDBCUserDAO implements UserDAO {
 	@Override
 	public void updateUser(User user) throws NotFoundException, NotConnectedException {
 		try {
-			this.userId = user.getUserId();
-			this.username = user.getUserName();
-			this.initials = user.getInitials();
-			this.cpr = user.getCpr();
-			this.password = user.getPassword();
-			this.roles = user.getRoles();
-			this.roles.toArray();
-
-			String updateStatement ="UPDATE " + tabel + " SET userId=?, username=?, initials=?, cpr=?, password=?, roles=?"
-					+ " WHERE userId=?";
-			statement = connection.prepareStatement(updateStatement);
-			statement.setInt(1, this.userId);
-			statement.setString(2, this.username);
-			statement.setString(3, this.initials);
-			statement.setString(4, this.cpr);
-			statement.setString(5, this.password);
-			statement.setString(6, this.roles.get(0));
+			String updateStatement ="UPDATE users SET name=?, ini=?, cpr=?, password=?, roles=?"
+					+ " WHERE id=?";
+			PreparedStatement statement = this.parent.getConnection().prepareStatement(updateStatement);
+			statement.setString(0, user.getUserName());
+			statement.setString(1, user.getInitials());
+			statement.setString(2, user.getCpr());
+			statement.setString(3, user.getPassword());
+			//TODO add roles
 			statement.executeQuery();
 		} catch (SQLException e) {
 			throw new NotConnectedException();
@@ -153,9 +143,9 @@ public class JDBCUserDAO implements UserDAO {
 	@Override
 	public void deleteUser(int userId) throws NotFoundException, NotConnectedException{
 		try {
-			String deleteStatement = "DELETE FROM " + tabel + " WHERE userId=?";
-			statement = connection.prepareStatement(deleteStatement);
-			statement.setInt(1, userId);
+			String deleteStatement = "DELETE FROM users WHERE id=?";
+			PreparedStatement statement = this.parent.getConnection().prepareStatement(deleteStatement);
+			statement.setInt(0, userId);
 			statement.executeQuery();
 		}
 		 catch (SQLException e) {

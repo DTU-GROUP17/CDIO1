@@ -1,13 +1,13 @@
 package app;
 
-import dal.inmemorydao.InMemoryDAO;
+import dal.jdbcdao.JDBCDAO;
 import ui.TUI;
 
 public class Starter {
-	public static void main(String... args){
+	public static void main(String... args) {
 		App app = new App(
-				new TUI(),
-				new InMemoryDAO()
+			new TUI(),
+			new JDBCDAO("Weight")
 		);
 		app.start();
 	}

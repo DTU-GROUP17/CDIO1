@@ -52,4 +52,14 @@ public class UserController {
 		}
 	}
 
+	public void deleteUser(int userId){
+		try {
+			this.userDAO.deleteUser(userId);
+		} catch (NotFoundException e) {
+			this.ui.showMessage("No user with that id");
+		} catch (NotConnectedException e) {
+			this.ui.showMessage("Not connected to database");
+		}
+	}
+
 }
