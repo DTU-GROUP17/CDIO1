@@ -127,6 +127,7 @@ public class JDBCUserDAO implements UserDAO {
 			statement.execute();
 			//TODO add roles
 		} catch (SQLException e) {
+			System.out.println(e);
 			throw new NotConnectedException();
 		}
 	}

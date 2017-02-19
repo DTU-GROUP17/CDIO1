@@ -2,7 +2,7 @@ package models;
 
 import java.util.List;
 
-public class User {
+public class User extends Model{
 
 	private Integer	userId;
 	private String userName;                
@@ -23,6 +23,8 @@ public class User {
 	public User(String userName, String initials, String cpr, String password, List<String> roles) {
 		this(null, userName, initials, cpr, password, roles);
 	}
+
+
 
 	public int getUserId() {
 		return this.userId;
