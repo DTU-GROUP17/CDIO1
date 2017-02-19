@@ -20,6 +20,10 @@ public class JDBCUserDAO implements UserDAO {
 		this.parent = parent;
 	}
 
+	private boolean isResultSetEmpty(ResultSet resultSet) throws SQLException {
+		return !resultSet.first();
+	}
+
 	private List<String> getUserRoles(int userID) throws NotFoundException, NotConnectedException{
 		try {
 			String query =
@@ -54,6 +58,9 @@ public class JDBCUserDAO implements UserDAO {
 				"FROM users" +
 				"WHERE id = " + userId;
 			ResultSet results = this.parent.getConnection().prepareStatement(query).executeQuery();
+			if(isResultSetEmpty(results))
+				throw new NotFoundException();
+
 			int id = results.getInt(0);
 			return new User(
 				id,
@@ -147,7 +154,8 @@ public class JDBCUserDAO implements UserDAO {
 			String deleteStatement = "DELETE FROM users WHERE id=?";
 			PreparedStatement statement = this.parent.getConnection().prepareStatement(deleteStatement);
 			statement.setInt(1, userId);
-			statement.executeQuery();
+			if(statement.executeUpdate() == 0)
+				throw new NotFoundException();
 		}
 		 catch (SQLException e) {
 			throw new NotConnectedException();
