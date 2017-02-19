@@ -81,6 +81,7 @@ public class JDBCUserDAO implements UserDAO {
 					"psswrd " +
 				"FROM users";
 			ResultSet results = this.parent.getConnection().prepareStatement(query).executeQuery();
+
 			while (results.next()) {
 				int id = results.getInt(1);
 				users.add(
@@ -129,10 +130,10 @@ public class JDBCUserDAO implements UserDAO {
 			String updateStatement ="UPDATE users SET name=?, ini=?, cpr=?, password=?, roles=?"
 					+ " WHERE id=?";
 			PreparedStatement statement = this.parent.getConnection().prepareStatement(updateStatement);
-			statement.setString(0, user.getUserName());
-			statement.setString(1, user.getInitials());
-			statement.setString(2, user.getCpr());
-			statement.setString(3, user.getPassword());
+			statement.setString(1, user.getUserName());
+			statement.setString(2, user.getInitials());
+			statement.setString(3, user.getCpr());
+			statement.setString(4, user.getPassword());
 			//TODO add roles
 			statement.executeQuery();
 		} catch (SQLException e) {
@@ -145,7 +146,7 @@ public class JDBCUserDAO implements UserDAO {
 		try {
 			String deleteStatement = "DELETE FROM users WHERE id=?";
 			PreparedStatement statement = this.parent.getConnection().prepareStatement(deleteStatement);
-			statement.setInt(0, userId);
+			statement.setInt(1, userId);
 			statement.executeQuery();
 		}
 		 catch (SQLException e) {

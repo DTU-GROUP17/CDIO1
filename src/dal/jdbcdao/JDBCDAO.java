@@ -12,19 +12,19 @@ public class JDBCDAO implements DAO {
 
 	private JDBCUserDAO userDAO;
 	private Connection connection;
-	private String url;
+	private String uri;
 
-	public JDBCDAO(String url) {
-		this.url = url;
+	public JDBCDAO(String uri) {
+		this.uri = uri;
 		this.userDAO = new JDBCUserDAO(this);
 	}
 
 	public Connection getConnection() throws NotConnectedException{
 		if (this.connection==null){
 			try {
-				Class.forName("com.mysql.jdbc.Driver").newInstance();
+				Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 				this.connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/" + this.url + "?verifyServerCertificate=false&useSSL=true",
+					"jdbc:mysql://localhost:3306/" + this.uri,
 					"root",
 					""
 				);
