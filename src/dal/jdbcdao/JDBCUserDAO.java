@@ -134,8 +134,14 @@ public class JDBCUserDAO implements UserDAO {
 	@Override
 	public void updateUser(User user) throws NotFoundException, NotConnectedException {
 		try {
-			String updateStatement ="UPDATE users SET name=?, ini=?, cpr=?, password=?, roles=?"
-					+ " WHERE id=?";
+			String updateStatement =
+				"UPDATE users " +
+				"SET" +
+					"name=?," +
+					"ini=?," +
+					"cpr=?," +
+					"password=?," +
+				"WHERE id=?";
 			PreparedStatement statement = this.parent.getConnection().prepareStatement(updateStatement);
 			statement.setString(1, user.getUserName());
 			statement.setString(2, user.getInitials());
@@ -151,7 +157,10 @@ public class JDBCUserDAO implements UserDAO {
 	@Override
 	public void deleteUser(int userId) throws NotFoundException, NotConnectedException{
 		try {
-			String deleteStatement = "DELETE FROM users WHERE id=?";
+			String deleteStatement =
+				"DELETE " +
+				"FROM users " +
+				"WHERE id=? ";
 			PreparedStatement statement = this.parent.getConnection().prepareStatement(deleteStatement);
 			statement.setInt(1, userId);
 			if(statement.executeUpdate() == 0)
@@ -161,7 +170,6 @@ public class JDBCUserDAO implements UserDAO {
 			throw new NotConnectedException();
 		}
 	}
-
 
 	@Override
 	public void create(User object) throws NotConnectedException {

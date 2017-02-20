@@ -1,11 +1,8 @@
 package models;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class User extends Model{
 
@@ -29,8 +26,7 @@ public class User extends Model{
 		this(null, userName, initials, cpr, password, roles);
 	}
 
-	private static final Pattern[] passwordRegex = new Pattern[4];
-	{
+	private static final Pattern[] passwordRegex = new Pattern[4]; {
 		passwordRegex[0] = Pattern.compile(".*[A-Z].*");
 		passwordRegex[1] = Pattern.compile(".*[a-z].*");
 		passwordRegex[2] = Pattern.compile(".*\\d.*");

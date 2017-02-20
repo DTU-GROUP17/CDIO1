@@ -1,7 +1,6 @@
 package factories;
 
 import com.github.javafaker.Faker;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import dal.contracts.Creatable;
 import dal.exceptions.NotConnectedException;
 import dal.jdbcdao.JDBCDAO;

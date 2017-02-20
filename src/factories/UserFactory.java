@@ -6,7 +6,7 @@ import models.User;
 import java.util.ArrayList;
 
 
-public class UserFactory extends Factory{
+public class UserFactory extends Factory {
 	public static Factory factory = new UserFactory();
 
 	@SuppressWarnings("unchecked")
