@@ -4,17 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class User extends Model{
+public class User implements DTO {
 
-	private Integer	userId;
+	private Integer id;
 	private String userName;                
 	private String initials;
 	private String cpr;
 	private String password;
 	private List<String> roles;
 
-	public User(Integer userId, String userName, String initials, String cpr, String password, List<String> roles){
-		this.userId = userId;
+	public User(Integer id, String userName, String initials, String cpr, String password, List<String> roles){
+		this.id = id;
 		this.userName = userName;
 		this.initials = initials;
 		this.cpr = cpr;
@@ -33,12 +33,12 @@ public class User extends Model{
 		passwordRegex[3] = Pattern.compile(".*[.-_+!?=].*");
 	}
 
-	public int getUserId() {
-		return this.userId;
+	public int getId() {
+		return this.id;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getUserName() {
@@ -102,7 +102,7 @@ public class User extends Model{
 		if(password.contains(this.getUserName()))
 			throw new InvalidInputException("Username cannot be part of password.");
 
-		if(password.contains(Integer.toString(this.getUserId())))
+		if(password.contains(Integer.toString(this.getId())))
 			throw new InvalidInputException("User id cannot be part of password.");
 
 		return true;

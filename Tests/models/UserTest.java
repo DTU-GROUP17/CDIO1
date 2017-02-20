@@ -34,7 +34,7 @@ public class UserTest {
 					.hasMessage("Username cannot be part of password.");
 
 		// Invalid password - Contains user ID.
-		assertThatThrownBy(() -> user.setPassword("Ab!aaa"+user.getUserId()))
+		assertThatThrownBy(() -> user.setPassword("Ab!aaa"+user.getId()))
 				.isInstanceOf(InvalidInputException.class)
 					.hasMessage("User id cannot be part of password.");
 	}

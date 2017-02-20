@@ -4,6 +4,7 @@ import models.User;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -21,28 +22,13 @@ public class UserFactoryTest {
 		assertThat(UserFactory.factory.make() instanceof User).isTrue();
 
 		// Create 1 user with times method.
-		assertThat(UserFactory.factory.times(1).make() instanceof User).isTrue();
+		assertThat(UserFactory.factory.make(1) instanceof User).isTrue();
 
 		// Create multiple user with times method.
-		assertThat(UserFactory.factory.times(2).make() instanceof ArrayList).isTrue();
-		assertThat(((ArrayList) UserFactory.factory.times(2).make()).size()).isEqualTo(2);
+		assertThat(UserFactory.factory.make(2) instanceof LinkedList).isTrue();
+		assertThat(((LinkedList) UserFactory.factory.make(2)).size()).isEqualTo(2);
 
-		((ArrayList) UserFactory.factory.times(2).make()).forEach(user -> assertThat(user instanceof User).isTrue());
-	}
-
-	@Test
-	public void create() throws Exception {
-		// Create 1 user.
-		assertThat(UserFactory.factory.create() instanceof User).isTrue();
-
-		// Create 1 user with times method.
-		assertThat(UserFactory.factory.times(1).create() instanceof User).isTrue();
-
-		// Create multiple user with times method.
-		assertThat(UserFactory.factory.times(2).create() instanceof ArrayList).isTrue();
-		assertThat(((ArrayList) UserFactory.factory.times(2).create()).size()).isEqualTo(2);
-
-		((ArrayList) UserFactory.factory.times(2).create()).forEach(user -> assertThat(user instanceof User).isTrue());
+		((LinkedList) UserFactory.factory.make(3)).forEach(user -> assertThat(user instanceof User).isTrue());
 	}
 
 }

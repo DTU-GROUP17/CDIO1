@@ -7,7 +7,7 @@ import dal.exceptions.NotConnectedException;
 import dal.exceptions.NotFoundException;
 import models.User;
 
-public interface UserDAO extends Creatable<User> {
+public interface UserDAO {
 
 	User findUser(int userId) throws NotFoundException, NotConnectedException;
 	List<User> getUsers() throws NotConnectedException;

@@ -6,6 +6,8 @@ import dal.contracts.UserDAO;
 import models.User;
 import ui.UI;
 
+import java.util.Arrays;
+
 public class UserController {
 
 	private UI ui;
@@ -42,8 +44,25 @@ public class UserController {
 		}
 	}
 
-	public void updateUser(User user) {
+	private String chooseNewProperty(String originalVal) {
+		String chosenValue = this.ui.getString("Choose new value for: "+originalVal);
+		if (chosenValue.isEmpty()){
+			return originalVal;
+		} else {
+			return chosenValue;
+		}
+	}
+
+	public void updateUser(int userId) {
 		try {
+			User user = this.userDAO.findUser(userId);
+			User other = new User(
+				this.chooseNewProperty(user.getUserName()),
+				this.chooseNewProperty(user.getInitials()),
+				this.chooseNewProperty(user.getCpr()),
+				this.chooseNewProperty(user.getPassword()),
+				Arrays.asList("Stor", "Mand")
+			);
 			this.userDAO.updateUser(user);
 		} catch (NotFoundException e) {
 			this.ui.showMessage("No user with that id");

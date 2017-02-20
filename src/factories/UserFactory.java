@@ -1,6 +1,6 @@
 package factories;
 
-import models.Model;
+import models.DTO;
 import models.User;
 
 import java.util.ArrayList;
@@ -11,13 +11,7 @@ public class UserFactory extends Factory {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	<T> T getDAO() {
-		return (T) jdbcdao.getUserDAO();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	<T extends Model> T instantiate() {
+	<T extends DTO> T instantiate() {
 		return (T) new User(
 				faker.number().randomDigit(),
 				faker.name().firstName(),

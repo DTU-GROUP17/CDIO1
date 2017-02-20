@@ -18,7 +18,7 @@ public class CreateUser extends Action {
 				this.app.getUi().getString("Choose initials"),
 				this.app.getUi().getString("Choose cpr"),
 				this.app.getUi().getString("Choose password"),
-				Arrays.asList("Stor", "Mand")
+				Arrays.asList("manager")
 			)
 		);
 	}

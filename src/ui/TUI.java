@@ -32,7 +32,7 @@ public class TUI implements UI {
 
 	@Override
 	public void showUser(User user) {
-		System.out.println("user: "+user.getUserId());
+		System.out.println("user: "+user.getId());
 	}
 
 	@Override

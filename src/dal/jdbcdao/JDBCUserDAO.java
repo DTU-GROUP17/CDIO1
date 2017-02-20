@@ -1,6 +1,5 @@
 package dal.jdbcdao;
 
-import dal.contracts.Creatable;
 import dal.contracts.UserDAO;
 import dal.exceptions.NotConnectedException;
 import dal.exceptions.NotFoundException;
@@ -9,6 +8,7 @@ import models.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,13 +119,35 @@ public class JDBCUserDAO implements UserDAO {
 					"psswrd" +
 				") " +
 				"VALUES (?,?,?,?)";
-			PreparedStatement statement = this.parent.getConnection().prepareStatement(query);
+
+			PreparedStatement statement = this.parent.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, user.getUserName());
 			statement.setString(2, user.getInitials());
 			statement.setString(3, user.getCpr());
 			statement.setString(4, user.getPassword());
+			statement.executeUpdate();
+			ResultSet results = statement.getGeneratedKeys();
+			int userId;
+			if (results.next()){
+				userId = results.getInt(1);
+			} else {
+				throw new NotConnectedException();
+			}
+			query =
+				"INSERT " +
+				"INTO roles_users (user_id, role_id) " +
+				"VALUES";
+			for (int i = 0; i<user.getRoles().size(); i++){
+				query += "(?, (SELECT id FROM roles WHERE name=?)),";
+			}
+			query = query.substring(0, query.length()-1)+';';
+			statement = this.parent.getConnection().prepareStatement(query);
+			int counter = 0;
+			for (String role : user.getRoles()){
+				statement.setInt(++counter, userId);
+				statement.setString(++counter, role);
+			}
 			statement.execute();
-			//TODO add roles
 		} catch (SQLException e) {
 			throw new NotConnectedException();
 		}
@@ -147,8 +169,23 @@ public class JDBCUserDAO implements UserDAO {
 			statement.setString(2, user.getInitials());
 			statement.setString(3, user.getCpr());
 			statement.setString(4, user.getPassword());
-			//TODO add roles
 			statement.executeQuery();
+			//TODO delete users roles before cancer
+			String query =
+				"INSERT " +
+				"INTO roles_users (user_id, role_id) " +
+				"VALUES";
+			for (int i = 0; i<user.getRoles().size(); i++){
+				query += "(?, (SELECT id FROM roles WHERE name=?)),";
+			}
+			query = query.substring(0, query.length()-1)+';';
+			statement = this.parent.getConnection().prepareStatement(query);
+			int counter = 0;
+			for (String role : user.getRoles()){
+				statement.setInt(++counter, user.getId());
+				statement.setString(++counter, role);
+			}
+
 		} catch (SQLException e) {
 			throw new NotConnectedException();
 		}
@@ -169,11 +206,6 @@ public class JDBCUserDAO implements UserDAO {
 		 catch (SQLException e) {
 			throw new NotConnectedException();
 		}
-	}
-
-	@Override
-	public void create(User object) throws NotConnectedException {
-		this.createUser(object);
 	}
 
 }

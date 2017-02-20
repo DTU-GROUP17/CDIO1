@@ -11,15 +11,5 @@ public class UpdateUser extends Action {
 	}
 
 	@Override
-	public void perform() {
-		this.app.getUserController().updateUser(
-				new User(
-				this.app.getUi().getString("Choose name"),
-				this.app.getUi().getString("Choose initials"),
-				this.app.getUi().getString("Choose cpr"),
-				this.app.getUi().getString("Choose password"),
-				Arrays.asList("Stor", "Mand")
-				)
-		);
-	}
+	public void perform() {}
 }

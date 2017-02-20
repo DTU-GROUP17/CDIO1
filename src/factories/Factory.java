@@ -1,67 +1,29 @@
 package factories;
 
 import com.github.javafaker.Faker;
-import dal.contracts.Creatable;
-import dal.exceptions.NotConnectedException;
-import dal.jdbcdao.JDBCDAO;
-import models.Model;
+import models.DTO;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public abstract class Factory {
 	static Faker faker = new Faker();
-	static JDBCDAO jdbcdao = new JDBCDAO("Weight");
 	public static Factory factory;
 
-	private int times = 1;
-
-
-	public Factory times(int x){
-		this.times = x;
-		return this;
-	}
-
 	@SuppressWarnings("unchecked")
-	public <T> T make(){
-		ArrayList<? extends Model> data = new ArrayList<>();
-
-		// Instantiates the object x times.
+	public <T> T make(int times){
+		if (times == 1) {
+			return (T) this.instantiate();
+		}
+		LinkedList<? extends DTO> data = new LinkedList<>();
 		for (int i = 0; i < times; i++)
-			data.add(instantiate());
-
-		// Reset times.
-		this.times = 1;
-
-		if(data.size() == 1)
-			return (T) data.get(0);
+			data.add(this.instantiate());
 		return (T) data;
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> T create() throws NotConnectedException{
-		T data = this.make();
-
-		if(data instanceof Model)
-			((Creatable)this.getDAO()).create(data);
-		else{
-			for (Model model : (ArrayList<Model>)data )
-				((Creatable) this.getDAO()).create(model);
-		}
-
-		return data;
+	public <T> T make(){
+		return this.make(1);
 	}
 
+	abstract  <T extends DTO> T instantiate();
 
-	abstract  <T> T getDAO();
-
-	abstract  <T extends Model> T instantiate();
-
-	/**
-	 * Sets the faker instance to another one.
-	 *
-	 * @param faker to replace with
-	 */
-	public static void setFaker(Faker faker) {
-		Factory.faker = faker;
-	}
 }
