@@ -1,6 +1,6 @@
 package dal.inmemorydao;
 
-import dal.UserDAO;
+import dal.contracts.UserDAO;
 import dal.exceptions.NotFoundException;
 import dal.exceptions.NotConnectedException;
 import models.User;
@@ -60,5 +60,10 @@ public class InMemoryUserDAO implements UserDAO {
 		} catch (Exception e){
 			throw new NotFoundException("could not find user");
 		}
+	}
+
+	@Override
+	public void create(User object) throws NotConnectedException {
+		this.createUser(object);
 	}
 }

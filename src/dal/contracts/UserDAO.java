@@ -1,4 +1,4 @@
-package dal;
+package dal.contracts;
 
 
 import java.util.List;
@@ -7,7 +7,7 @@ import dal.exceptions.NotConnectedException;
 import dal.exceptions.NotFoundException;
 import models.User;
 
-public interface UserDAO {
+public interface UserDAO extends Creatable<User> {
 
 	User findUser(int userId) throws NotFoundException, NotConnectedException;
 	List<User> getUsers() throws NotConnectedException;

@@ -1,7 +1,7 @@
 package dal.inmemorydao;
 
-import dal.DAO;
-import dal.UserDAO;
+import dal.contracts.DAO;
+import dal.contracts.UserDAO;
 
 public class InMemoryDAO implements DAO {
 

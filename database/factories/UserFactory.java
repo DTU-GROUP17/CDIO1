@@ -7,16 +7,19 @@ import java.util.ArrayList;
 
 
 public class UserFactory extends Factory{
+	public static Factory factory = new UserFactory();
 
-
-	public UserFactory(int x) {
-		super(x);
+	@SuppressWarnings("unchecked")
+	@Override
+	<T> T getDAO() {
+		return (T) jdbcdao.getUserDAO();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	<T extends Model> T create() {
+	<T extends Model> T instantiate() {
 		return (T) new User(
+				faker.number().randomDigit(),
 				faker.name().firstName(),
 				faker.name().prefix(),
 				faker.lorem().characters(10),

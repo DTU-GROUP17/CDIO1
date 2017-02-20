@@ -1,6 +1,11 @@
 package models;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class User extends Model{
 
@@ -24,7 +29,13 @@ public class User extends Model{
 		this(null, userName, initials, cpr, password, roles);
 	}
 
-
+	private static final Pattern[] passwordRegex = new Pattern[4];
+	{
+		passwordRegex[0] = Pattern.compile(".*[A-Z].*");
+		passwordRegex[1] = Pattern.compile(".*[a-z].*");
+		passwordRegex[2] = Pattern.compile(".*\\d.*");
+		passwordRegex[3] = Pattern.compile(".*[.-_+!?=].*");
+	}
 
 	public int getUserId() {
 		return this.userId;
@@ -74,8 +85,31 @@ public class User extends Model{
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(String password) throws InvalidInputException {
+		passwordVerify(password);
+
 		this.password = password;
+	}
+
+	public boolean passwordVerify() throws InvalidInputException{
+		return passwordVerify(this.getPassword());
+	}
+
+	public boolean passwordVerify(String password) throws InvalidInputException {
+
+		if( Arrays.stream(passwordRegex).filter(regex -> regex.matcher(password).matches()).count() < 3)
+			throw new InvalidInputException("Password does not contain 3 of the 4 categories.");
+
+		if(password.length() < 6)
+			throw new InvalidInputException("Password is not 6 characters long.");
+
+		if(password.contains(this.getUserName()))
+			throw new InvalidInputException("Username cannot be part of password.");
+
+		if(password.contains(Integer.toString(this.getUserId())))
+			throw new InvalidInputException("User id cannot be part of password.");
+
+		return true;
 	}
 
 }

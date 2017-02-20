@@ -1,4 +1,4 @@
-package dal;
+package dal.contracts;
 
 public interface DAO {
 

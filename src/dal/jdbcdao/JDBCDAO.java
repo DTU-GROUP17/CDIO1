@@ -1,7 +1,7 @@
 package dal.jdbcdao;
 
-import dal.DAO;
-import dal.UserDAO;
+import dal.contracts.DAO;
+import dal.contracts.UserDAO;
 import dal.exceptions.NotConnectedException;
 
 import java.sql.Connection;

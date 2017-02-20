@@ -5,11 +5,7 @@ import app.actions.CreateUser;
 import app.actions.DeleteUser;
 import app.actions.ViewUsers;
 import controllers.UserController;
-import dal.DAO;
-import dal.UserDAO;
-import dal.exceptions.NotConnectedException;
-import factories.UserFactory;
-import models.User;
+import dal.contracts.DAO;
 import ui.UI;
 
 import java.util.Hashtable;

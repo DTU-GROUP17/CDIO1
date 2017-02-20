@@ -1,11 +1,11 @@
 package dal.jdbcdao;
 
-import dal.UserDAO;
+import dal.contracts.Creatable;
+import dal.contracts.UserDAO;
 import dal.exceptions.NotConnectedException;
 import dal.exceptions.NotFoundException;
 import models.User;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -127,7 +127,6 @@ public class JDBCUserDAO implements UserDAO {
 			statement.execute();
 			//TODO add roles
 		} catch (SQLException e) {
-			System.out.println(e);
 			throw new NotConnectedException();
 		}
 	}
@@ -162,4 +161,11 @@ public class JDBCUserDAO implements UserDAO {
 			throw new NotConnectedException();
 		}
 	}
+
+
+	@Override
+	public void create(User object) throws NotConnectedException {
+		this.createUser(object);
+	}
+
 }

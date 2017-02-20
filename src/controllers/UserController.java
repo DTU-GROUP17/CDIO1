@@ -2,7 +2,7 @@ package controllers;
 
 import dal.exceptions.NotConnectedException;
 import dal.exceptions.NotFoundException;
-import dal.UserDAO;
+import dal.contracts.UserDAO;
 import models.User;
 import ui.UI;
 
