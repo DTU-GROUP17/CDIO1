@@ -9,23 +9,23 @@ import java.util.regex.Pattern;
 public class User implements DTO {
 
 	private Integer id;
-	private String userName;                
+	private String name;
 	private String initials;
 	private String cpr;
 	private String password;
 	private List<Role> roles;
 
-	public User(Integer id, String userName, String initials, String cpr, String password, List<Role> roles){
+	public User(Integer id, String name, String initials, String cpr, String password, List<Role> roles){
 		this.id = id;
-		this.userName = userName;
+		this.name = name;
 		this.initials = initials;
 		this.cpr = cpr;
 		this.password = password;
 		this.roles = roles;
 	}
 
-	public User(String userName, String initials, String cpr, String password, List<Role> roles) {
-		this(null, userName, initials, cpr, password, roles);
+	public User(String name, String initials, String cpr, String password, List<Role> roles) {
+		this(null, name, initials, cpr, password, roles);
 	}
 
 	private static final Pattern[] passwordRegex = new Pattern[4]; {
@@ -43,7 +43,7 @@ public class User implements DTO {
 		if (this.getPassword().length() < 6)
 			throw new InvalidInputException("Password is not 6 characters long.");
 
-		if (this.getPassword().contains(this.getUserName()))
+		if (this.getPassword().contains(this.getName()))
 			throw new InvalidInputException("Username cannot be part of password.");
 
 		if (this.getPassword().contains(Integer.toString(this.getId())))
@@ -53,7 +53,6 @@ public class User implements DTO {
 
 	}
 
-
 	public int getId() {
 		return this.id;
 	}
@@ -62,12 +61,12 @@ public class User implements DTO {
 		this.id = id;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getName() {
+		return name;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getInitials() {
@@ -102,5 +101,16 @@ public class User implements DTO {
 		return password;
 	}
 
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", initials='" + initials + '\'' +
+				", cpr='" + cpr + '\'' +
+				", password='" + password + '\'' +
+				", roles=" + roles +
+				'}';
+	}
 
 }

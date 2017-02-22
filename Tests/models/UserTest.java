@@ -30,7 +30,7 @@ public class UserTest {
 //					.hasMessage("Password is not 6 characters long.");
 //
 //		// Invalid password - Contains username.
-//		assertThatThrownBy(() -> user.setPassword("Ab!aaa"+user.getUserName()))
+//		assertThatThrownBy(() -> user.setPassword("Ab!aaa"+user.getName()))
 //				.isInstanceOf(InvalidInputException.class)
 //					.hasMessage("Username cannot be part of password.");
 //

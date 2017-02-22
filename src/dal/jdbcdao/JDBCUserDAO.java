@@ -52,7 +52,6 @@ public class JDBCUserDAO implements UserDAO {
 		try {
 			String query =
 				"SELECT " +
-					"id, " +
 					"name, " +
 					"ini, " +
 					"cpr, " +
@@ -65,15 +64,13 @@ public class JDBCUserDAO implements UserDAO {
 			if(!results.first()) {
 				throw new NotFoundException();
 			}
-
-			int id = results.getInt(1);
 			return new User(
-				id,
+				userId,
 				results.getString(1),
 				results.getString(2),
 				results.getString(3),
 				results.getString(4),
-				this.getUserRoles(id)
+				this.getUserRoles(userId)
 			);
 		} catch (SQLException e) {
 			throw new NotConnectedException();
@@ -125,7 +122,7 @@ public class JDBCUserDAO implements UserDAO {
 				"VALUES (?,?,?,?)";
 
 			PreparedStatement statement = this.parent.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-			statement.setString(1, user.getUserName());
+			statement.setString(1, user.getName());
 			statement.setString(2, user.getInitials());
 			statement.setString(3, user.getCpr());
 			statement.setString(4, user.getPassword());
@@ -160,7 +157,6 @@ public class JDBCUserDAO implements UserDAO {
 	@Override
 	public void updateUser(User user) throws NotFoundException, NotConnectedException {
 		try {
-			System.out.println("user.getId() = " + user.getId());
 			String updateStatement =
 				"UPDATE users " +
 				"SET " +
@@ -169,14 +165,12 @@ public class JDBCUserDAO implements UserDAO {
 					"cpr=?, " +
 					"psswrd=? " +
 				"WHERE id=?";
-			System.out.println("updateStatement = " + updateStatement);
 			PreparedStatement statement = this.parent.getConnection().prepareStatement(updateStatement);
-			statement.setString(1, user.getUserName());
+			statement.setString(1, user.getName());
 			statement.setString(2, user.getInitials());
 			statement.setString(3, user.getCpr());
 			statement.setString(4, user.getPassword());
 			statement.setInt(5, user.getId());
-			System.out.println(statement.toString());
 			statement.execute();
 			String query =
 				"DELETE " +
@@ -198,9 +192,9 @@ public class JDBCUserDAO implements UserDAO {
 				statement.setInt(++counter, user.getId());
 				statement.setString(++counter, role);
 			}
+			statement.execute();
 
 		} catch (SQLException e) {
-			System.out.println("e = " + e);
 			throw new NotConnectedException();
 		}
 	}

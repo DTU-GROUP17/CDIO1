@@ -28,7 +28,6 @@ public class JDBCRoleDAO implements RoleDAO {
 					"id, " +
 					"name " +
 				"FROM roles";
-			System.out.println("query = " + query);
 			ResultSet results = this.parent.getConnection().prepareStatement(query).executeQuery();
 			while (results.next()) {
 				roles.add(
@@ -39,7 +38,6 @@ public class JDBCRoleDAO implements RoleDAO {
 				);
 			}
 		} catch (SQLException e) {
-			System.out.println("e = " + e);
 			throw new NotConnectedException();
 		}
 		return roles;

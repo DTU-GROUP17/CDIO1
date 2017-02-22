@@ -17,9 +17,12 @@ public class TUI implements UI {
 
 	@Override
 	public String getString(String message) {
-		this.scanner.reset();
 		System.out.print(message+": ");
-		return this.scanner.nextLine();
+		String result;
+		do {
+			result = this.scanner.nextLine();
+		} while (result.isEmpty());
+		return result;
 	}
 
 	@Override
@@ -87,7 +90,9 @@ public class TUI implements UI {
 
 	@Override
 	public void showUser(User user) {
-		System.out.println("user: "+user.getId());
+		System.out.println(
+			user.toString()
+		);
 	}
 
 	@Override

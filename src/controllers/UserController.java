@@ -68,8 +68,8 @@ public class UserController {
 		}
 	}
 
-	private String chooseNewProperty(String originalVal) {
-		String chosenValue = this.ui.getString("Choose new value for: "+originalVal);
+	private String chooseNewProperty(String message, String originalVal) {
+		String chosenValue = this.ui.getString(message+": "+originalVal);
 		if (chosenValue.isEmpty()){
 			return originalVal;
 		} else {
@@ -84,10 +84,10 @@ public class UserController {
 			UserFactory builder =
 				new UserFactory()
 					.setId(user.getId())
-					.setName(this.chooseNewProperty(user.getUserName()))
-					.setInitials(this.chooseNewProperty(user.getInitials()))
-					.setCpr(this.chooseNewProperty(user.getCpr()))
-					.setPassword(this.chooseNewProperty(user.getPassword()))
+					.setName(this.chooseNewProperty("Current name", user.getName()))
+					.setInitials(this.chooseNewProperty("Current ini", user.getInitials()))
+					.setCpr(this.chooseNewProperty("Current cpr", user.getCpr()))
+					.setPassword(this.chooseNewProperty("Current password", user.getPassword()))
 					.setRoles(this.chooseRoles());
 			while (true) {
 				try {
