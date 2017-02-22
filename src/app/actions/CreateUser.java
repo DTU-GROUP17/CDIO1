@@ -1,9 +1,7 @@
 package app.actions;
 
 import app.App;
-import models.User;
 
-import java.util.Arrays;
 
 public class CreateUser extends Action {
 	public CreateUser(App app) {

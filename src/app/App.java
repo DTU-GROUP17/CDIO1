@@ -35,7 +35,6 @@ public class App {
 	}
 
 	public void start() {
-		String choice;
 		do {
 			this.chooseAction(
 				this.getUi().getString(

@@ -2,9 +2,7 @@ package dal.jdbcdao;
 
 import dal.contracts.RoleDAO;
 import dal.exceptions.NotConnectedException;
-import dal.exceptions.NotFoundException;
 import models.Role;
-import models.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -22,9 +22,6 @@ public class JDBCUserDAO implements UserDAO {
 		this.parent = parent;
 	}
 
-	private boolean isResultSetEmpty(ResultSet resultSet) throws SQLException {
-		return !resultSet.first();
-	}
 
 	private List<Role> getUserRoles(int userID) throws NotFoundException, NotConnectedException{
 		try {

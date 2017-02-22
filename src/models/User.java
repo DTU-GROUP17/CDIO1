@@ -37,7 +37,7 @@ public class User implements DTO {
 
 	public boolean passwordVerify() throws InvalidInputException {
 
-		if (Arrays.stream(this.passwordRegex).filter(regex -> regex.matcher(this.getPassword()).matches()).count() < 3)
+		if (Arrays.stream(passwordRegex).filter(regex -> regex.matcher(this.getPassword()).matches()).count() < 3)
 			throw new InvalidInputException("Password does not contain 3 of the 4 categories.");
 
 		if (this.getPassword().length() < 6)
