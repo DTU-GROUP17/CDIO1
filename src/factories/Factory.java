@@ -10,7 +10,7 @@ public abstract class Factory {
 	public static Factory factory;
 
 	@SuppressWarnings("unchecked")
-	public <T> T make(int times){
+	public <T> T make(int times) throws InvalidInputException {
 		if (times == 1) {
 			return (T) this.instantiate();
 		}
@@ -20,10 +20,10 @@ public abstract class Factory {
 		return (T) data;
 	}
 
-	public <T> T make(){
+	public <T> T make() throws InvalidInputException {
 		return this.make(1);
 	}
 
-	abstract  <T extends DTO> T instantiate();
+	abstract  <T extends DTO> T instantiate() throws InvalidInputException;
 
 }

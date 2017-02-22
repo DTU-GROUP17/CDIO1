@@ -3,6 +3,7 @@ package dal.jdbcdao;
 import dal.contracts.UserDAO;
 import dal.exceptions.NotConnectedException;
 import dal.exceptions.NotFoundException;
+import models.Role;
 import models.User;
 
 import java.sql.PreparedStatement;
@@ -11,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JDBCUserDAO implements UserDAO {
 
@@ -24,7 +26,7 @@ public class JDBCUserDAO implements UserDAO {
 		return !resultSet.first();
 	}
 
-	private List<String> getUserRoles(int userID) throws NotFoundException, NotConnectedException{
+	private List<Role> getUserRoles(int userID) throws NotFoundException, NotConnectedException{
 		try {
 			String query =
 				"SELECT roles.name " +
@@ -35,9 +37,9 @@ public class JDBCUserDAO implements UserDAO {
 			PreparedStatement statement = this.parent.getConnection().prepareStatement(query);
 			statement.setInt(1, userID);
 			ResultSet results = statement.executeQuery();
-			List<String> roles = new ArrayList<>();
+			List<Role> roles = new ArrayList<>();
 			while (results.next()){
-				roles.add(results.getString(1));
+				roles.add(new Role(results.getString(1)));
 			}
 			return roles;
 		} catch (SQLException e) {
@@ -50,18 +52,21 @@ public class JDBCUserDAO implements UserDAO {
 		try {
 			String query =
 				"SELECT " +
-					"id," +
-					"name," +
-					"ini," +
-					"cpr," +
-					"password" +
-				"FROM users" +
-				"WHERE id = " + userId;
-			ResultSet results = this.parent.getConnection().prepareStatement(query).executeQuery();
-			if(isResultSetEmpty(results))
+					"id, " +
+					"name, " +
+					"ini, " +
+					"cpr, " +
+					"psswrd " +
+				"FROM users " +
+				"WHERE id = ?";
+			PreparedStatement statement = this.parent.getConnection().prepareStatement(query);
+			statement.setInt(1, userId);
+			ResultSet results = statement.executeQuery();
+			if(!results.first()) {
 				throw new NotFoundException();
+			}
 
-			int id = results.getInt(0);
+			int id = results.getInt(1);
 			return new User(
 				id,
 				results.getString(1),
@@ -88,7 +93,6 @@ public class JDBCUserDAO implements UserDAO {
 					"psswrd " +
 				"FROM users";
 			ResultSet results = this.parent.getConnection().prepareStatement(query).executeQuery();
-
 			while (results.next()) {
 				int id = results.getInt(1);
 				users.add(
@@ -143,7 +147,7 @@ public class JDBCUserDAO implements UserDAO {
 			query = query.substring(0, query.length()-1)+';';
 			statement = this.parent.getConnection().prepareStatement(query);
 			int counter = 0;
-			for (String role : user.getRoles()){
+			for (String role : user.getRoles().stream().map(Role::getName).collect(Collectors.toList())){
 				statement.setInt(++counter, userId);
 				statement.setString(++counter, role);
 			}
@@ -156,22 +160,31 @@ public class JDBCUserDAO implements UserDAO {
 	@Override
 	public void updateUser(User user) throws NotFoundException, NotConnectedException {
 		try {
+			System.out.println("user.getId() = " + user.getId());
 			String updateStatement =
 				"UPDATE users " +
-				"SET" +
-					"name=?," +
-					"ini=?," +
-					"cpr=?," +
-					"password=?," +
+				"SET " +
+					"name=?, " +
+					"ini=?, " +
+					"cpr=?, " +
+					"psswrd=? " +
 				"WHERE id=?";
+			System.out.println("updateStatement = " + updateStatement);
 			PreparedStatement statement = this.parent.getConnection().prepareStatement(updateStatement);
 			statement.setString(1, user.getUserName());
 			statement.setString(2, user.getInitials());
 			statement.setString(3, user.getCpr());
 			statement.setString(4, user.getPassword());
-			statement.executeQuery();
-			//TODO delete users roles before cancer
+			statement.setInt(5, user.getId());
+			System.out.println(statement.toString());
+			statement.execute();
 			String query =
+				"DELETE " +
+				"FROM roles_users " +
+				"WHERE user_id=?";
+			statement = this.parent.getConnection().prepareStatement(query);
+			statement.setInt(1, user.getId());
+			query =
 				"INSERT " +
 				"INTO roles_users (user_id, role_id) " +
 				"VALUES";
@@ -181,12 +194,13 @@ public class JDBCUserDAO implements UserDAO {
 			query = query.substring(0, query.length()-1)+';';
 			statement = this.parent.getConnection().prepareStatement(query);
 			int counter = 0;
-			for (String role : user.getRoles()){
+			for (String role : user.getRoles().stream().map(Role::getName).collect(Collectors.toList())){
 				statement.setInt(++counter, user.getId());
 				statement.setString(++counter, role);
 			}
 
 		} catch (SQLException e) {
+			System.out.println("e = " + e);
 			throw new NotConnectedException();
 		}
 	}

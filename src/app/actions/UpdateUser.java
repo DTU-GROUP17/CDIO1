@@ -1,9 +1,6 @@
 package app.actions;
 
-import java.util.Arrays;
-
 import app.App;
-import models.User;
 
 public class UpdateUser extends Action {
 	public UpdateUser(App app) {
@@ -11,5 +8,9 @@ public class UpdateUser extends Action {
 	}
 
 	@Override
-	public void perform() {}
+	public void perform() {
+		this.app.getUserController().updateUser(
+			this.app.getUi().getInt("Choose user id")
+		);
+	}
 }

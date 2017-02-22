@@ -1,9 +1,6 @@
 package app;
 
-import app.actions.Action;
-import app.actions.CreateUser;
-import app.actions.DeleteUser;
-import app.actions.ViewUsers;
+import app.actions.*;
 import controllers.UserController;
 import dal.contracts.DAO;
 import ui.UI;
@@ -20,12 +17,13 @@ public class App {
 		this.ui = ui;
 		this.userController = new UserController(
 				this.ui,
-				dao.getUserDAO()
+				dao
 		);
 		this.actions = new Hashtable<>();
 		this.actions.put("Create user", new CreateUser(this));
 		this.actions.put("View users", new ViewUsers(this));
 		this.actions.put("Delete user", new DeleteUser(this));
+		this.actions.put("Update user", new UpdateUser(this));
 	}
 
 	private void chooseAction(String actionKey){

@@ -1,4 +1,4 @@
-package models;
+package factories;
 
 
 public class InvalidInputException extends Exception {

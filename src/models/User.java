@@ -1,5 +1,7 @@
 package models;
 
+import factories.InvalidInputException;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -11,9 +13,9 @@ public class User implements DTO {
 	private String initials;
 	private String cpr;
 	private String password;
-	private List<String> roles;
+	private List<Role> roles;
 
-	public User(Integer id, String userName, String initials, String cpr, String password, List<String> roles){
+	public User(Integer id, String userName, String initials, String cpr, String password, List<Role> roles){
 		this.id = id;
 		this.userName = userName;
 		this.initials = initials;
@@ -22,7 +24,7 @@ public class User implements DTO {
 		this.roles = roles;
 	}
 
-	public User(String userName, String initials, String cpr, String password, List<String> roles) {
+	public User(String userName, String initials, String cpr, String password, List<Role> roles) {
 		this(null, userName, initials, cpr, password, roles);
 	}
 
@@ -32,6 +34,25 @@ public class User implements DTO {
 		passwordRegex[2] = Pattern.compile(".*\\d.*");
 		passwordRegex[3] = Pattern.compile(".*[.-_+!?=].*");
 	}
+
+	public boolean passwordVerify() throws InvalidInputException {
+
+		if (Arrays.stream(this.passwordRegex).filter(regex -> regex.matcher(this.getPassword()).matches()).count() < 3)
+			throw new InvalidInputException("Password does not contain 3 of the 4 categories.");
+
+		if (this.getPassword().length() < 6)
+			throw new InvalidInputException("Password is not 6 characters long.");
+
+		if (this.getPassword().contains(this.getUserName()))
+			throw new InvalidInputException("Username cannot be part of password.");
+
+		if (this.getPassword().contains(Integer.toString(this.getId())))
+			throw new InvalidInputException("User id cannot be part of password.");
+
+		return true;
+
+	}
+
 
 	public int getId() {
 		return this.id;
@@ -57,11 +78,11 @@ public class User implements DTO {
 		this.initials = initials;
 	}
 
-	public List<String> getRoles() {
+	public List<Role> getRoles() {
 		return roles;
 	}
 	
-	public void addRole(String role){
+	public void addRole(Role role){
 		this.roles.add(role);
 	}
 
@@ -81,31 +102,5 @@ public class User implements DTO {
 		return password;
 	}
 
-	public void setPassword(String password) throws InvalidInputException {
-		passwordVerify(password);
-
-		this.password = password;
-	}
-
-	public boolean passwordVerify() throws InvalidInputException{
-		return passwordVerify(this.getPassword());
-	}
-
-	public boolean passwordVerify(String password) throws InvalidInputException {
-
-		if( Arrays.stream(passwordRegex).filter(regex -> regex.matcher(password).matches()).count() < 3)
-			throw new InvalidInputException("Password does not contain 3 of the 4 categories.");
-
-		if(password.length() < 6)
-			throw new InvalidInputException("Password is not 6 characters long.");
-
-		if(password.contains(this.getUserName()))
-			throw new InvalidInputException("Username cannot be part of password.");
-
-		if(password.contains(Integer.toString(this.getId())))
-			throw new InvalidInputException("User id cannot be part of password.");
-
-		return true;
-	}
 
 }

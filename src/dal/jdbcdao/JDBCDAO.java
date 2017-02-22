@@ -1,6 +1,7 @@
 package dal.jdbcdao;
 
 import dal.contracts.DAO;
+import dal.contracts.RoleDAO;
 import dal.contracts.UserDAO;
 import dal.exceptions.NotConnectedException;
 
@@ -11,12 +12,14 @@ import java.sql.SQLException;
 public class JDBCDAO implements DAO {
 
 	private JDBCUserDAO userDAO;
+	private JDBCRoleDAO roleDAO;
 	private Connection connection;
 	private String uri;
 
 	public JDBCDAO(String uri) {
 		this.uri = uri;
 		this.userDAO = new JDBCUserDAO(this);
+		this.roleDAO = new JDBCRoleDAO(this);
 	}
 
 	public Connection getConnection() throws NotConnectedException{
@@ -39,4 +42,10 @@ public class JDBCDAO implements DAO {
 	public UserDAO getUserDAO() {
 		return this.userDAO;
 	}
+
+	@Override
+	public RoleDAO getRoleDAO() {
+		return this.roleDAO;
+	}
+
 }
