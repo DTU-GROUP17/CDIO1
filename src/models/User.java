@@ -1,7 +1,11 @@
 package models;
 
-import factories.InvalidInputException;
+import factories.exceptions.InvalidCprException;
+import factories.exceptions.InvalidInitialsException;
+import factories.exceptions.InvalidPasswordException;
+import factories.exceptions.InvalidUsernameException;
 
+import javax.naming.InvalidNameException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -35,22 +39,45 @@ public class User implements DTO {
 		passwordRegex[3] = Pattern.compile(".*[.-_+!?=].*");
 	}
 
-	public boolean passwordVerify() throws InvalidInputException {
+	public void passwordVerify() throws InvalidPasswordException {
 
 		if (Arrays.stream(passwordRegex).filter(regex -> regex.matcher(this.getPassword()).matches()).count() < 3)
-			throw new InvalidInputException("Password does not contain 3 of the 4 categories.");
+			throw new InvalidPasswordException("Password does not contain 3 of the 4 categories.");
 
 		if (this.getPassword().length() < 6)
-			throw new InvalidInputException("Password is not 6 characters long.");
+			throw new InvalidPasswordException("Password is not 6 characters long.");
 
 		if (this.getPassword().contains(this.getName()))
-			throw new InvalidInputException("Username cannot be part of password.");
+			throw new InvalidPasswordException("Username cannot be part of password.");
 
 		if (this.getPassword().contains(Integer.toString(this.getId())))
-			throw new InvalidInputException("User id cannot be part of password.");
+			throw new InvalidPasswordException("User id cannot be part of password.");
+	}
 
-		return true;
+	public void cprVerify() throws InvalidCprException {
+		if (this.getCpr().length()!=10) {
+			throw new InvalidCprException("Cpr length not 10 characters");
+		}
 
+		if (!Pattern.matches("\\d*", this.getCpr())) {
+			throw new InvalidCprException("Cpr can only contain numerals");
+		}
+	}
+
+	public void initialVerify() throws InvalidInitialsException {
+		if (this.getInitials().length()<2 || this.getInitials().length()>4) {
+			throw new InvalidInitialsException("Initials not between 2 and 4 characters");
+		}
+
+		if (!Pattern.matches("[a-zA-Z]+", this.getInitials())) {
+			throw new InvalidInitialsException("Initials can only contain letters");
+		}
+	}
+
+	public void nameVerify() throws InvalidUsernameException {
+		if (this.getInitials().length()<2 || this.getInitials().length()>20) {
+			throw new InvalidUsernameException("Initials not between 2 and 20 characters");
+		}
 	}
 
 	public int getId() {

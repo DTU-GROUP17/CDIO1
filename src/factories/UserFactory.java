@@ -1,10 +1,10 @@
 package factories;
 
+import factories.exceptions.InvalidInputException;
 import models.DTO;
 import models.Role;
 import models.User;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,6 +41,9 @@ public class UserFactory extends Factory {
 		}
 		User user = new User(id, name, initials, cpr, password, roles);
 		user.passwordVerify();
+		user.cprVerify();
+		user.initialVerify();
+		user.nameVerify();
 		return (T) user;
 	}
 
@@ -73,4 +76,5 @@ public class UserFactory extends Factory {
 		this.roles = roles;
 		return this;
 	}
+
 }

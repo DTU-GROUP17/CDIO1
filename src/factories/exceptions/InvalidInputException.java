@@ -1,7 +1,7 @@
-package factories;
+package factories.exceptions;
 
 
-public class InvalidInputException extends Exception {
+public abstract class InvalidInputException extends Exception {
 
 	public InvalidInputException() {
 	}

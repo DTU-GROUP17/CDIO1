@@ -1,6 +1,7 @@
 package factories;
 
 import com.github.javafaker.Faker;
+import factories.exceptions.InvalidInputException;
 import models.DTO;
 
 import java.util.LinkedList;

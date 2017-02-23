@@ -24,6 +24,7 @@ public class App {
 		this.actions.put("View users", new ViewUsers(this));
 		this.actions.put("Delete user", new DeleteUser(this));
 		this.actions.put("Update user", new UpdateUser(this));
+		this.actions.put("exit", new CloseProgram(this));
 	}
 
 	private void chooseAction(String actionKey){

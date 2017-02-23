@@ -1,6 +1,6 @@
 package models;
 
-import factories.InvalidInputException;
+import factories.exceptions.InvalidInputException;
 import factories.UserFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +32,10 @@ public class UserTest {
 		assertThatThrownBy(() -> new UserFactory().setName("brugernavn").setPassword("Ab!aaa"+"brugernavn").make())
 				.isInstanceOf(InvalidInputException.class)
 					.hasMessage("Username cannot be part of password.");
+
+		// Invalid password - Contains id.
+		assertThatThrownBy(() -> new UserFactory().setId(10).setPassword("Ab!aaa"+"10").make())
+				.isInstanceOf(InvalidInputException.class);
 	}
 
 }

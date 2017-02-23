@@ -3,11 +3,9 @@ package factories;
 import models.User;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
-import static org.assertj.core.api.Assertions.*;
-
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserFactoryTest {
 
