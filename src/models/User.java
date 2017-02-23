@@ -28,7 +28,7 @@ public class User implements DTO {
 		this(null, name, initials, cpr, password, roles);
 	}
 
-	private static final Pattern[] passwordRegex = new Pattern[4]; {
+	private static final Pattern[] passwordRegex = new Pattern[4]; static {
 		passwordRegex[0] = Pattern.compile(".*[A-Z].*");
 		passwordRegex[1] = Pattern.compile(".*[a-z].*");
 		passwordRegex[2] = Pattern.compile(".*\\d.*");

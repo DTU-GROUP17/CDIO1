@@ -40,6 +40,5 @@
             <artifactId>assertj-core</artifactId>
             <version>3.6.2</version>
         </dependency>
-
     </dependencies>
 </project>

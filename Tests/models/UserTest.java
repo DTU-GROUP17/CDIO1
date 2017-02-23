@@ -17,27 +17,21 @@ public class UserTest {
 
 	@Test
 	public void passwordVerify() throws Exception {
-		User user = UserFactory.factory.make();
 
-//		// Invalid password - does not match 3 categories.
-//		assertThatThrownBy(() -> user.setPassword("invalid"))
-//				.isInstanceOf(InvalidInputException.class)
-//					.hasMessage("Password does not contain 3 of the 4 categories.");
-//
-//		// Invalid password - Not long enough.
-//		assertThatThrownBy(() -> user.setPassword("Ab!"))
-//				.isInstanceOf(InvalidInputException.class)
-//					.hasMessage("Password is not 6 characters long.");
-//
-//		// Invalid password - Contains username.
-//		assertThatThrownBy(() -> user.setPassword("Ab!aaa"+user.getName()))
-//				.isInstanceOf(InvalidInputException.class)
-//					.hasMessage("Username cannot be part of password.");
-//
-//		// Invalid password - Contains user ID.
-//		assertThatThrownBy(() -> user.setPassword("Ab!aaa"+user.getId()))
-//				.isInstanceOf(InvalidInputException.class)
-//					.hasMessage("User id cannot be part of password.");
+		// Invalid password - does not match 3 categories.
+		assertThatThrownBy(() -> new UserFactory().setPassword("invalid").make())
+				.isInstanceOf(InvalidInputException.class)
+					.hasMessage("Password does not contain 3 of the 4 categories.");
+
+		// Invalid password - Not long enough.
+		assertThatThrownBy(() -> new UserFactory().setPassword("Ab!").make())
+				.isInstanceOf(InvalidInputException.class)
+					.hasMessage("Password is not 6 characters long.");
+
+		// Invalid password - Contains username.
+		assertThatThrownBy(() -> new UserFactory().setName("brugernavn").setPassword("Ab!aaa"+"brugernavn").make())
+				.isInstanceOf(InvalidInputException.class)
+					.hasMessage("Username cannot be part of password.");
 	}
 
 }
