@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+/**
+ * An TUI implementation for our UI.
+ */
 public class TUI implements UI {
 
 	private Scanner scanner;
@@ -15,6 +18,12 @@ public class TUI implements UI {
 		this.scanner = new Scanner(System.in);
 	}
 
+	/**
+	 * Gets a string from the scanner.
+	 *
+	 * @param message to show
+	 * @return the string user wrote
+	 */
 	@Override
 	public String getString(String message) {
 		System.out.print(message+": ");
