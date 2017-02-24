@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <eclipse-userlibraries>
+  <library name="Maven: com.github.javafaker:javafaker:0.12">
+    <archive path="/Users/olivernybroe/.m2/repository/com/github/javafaker/javafaker/0.12/javafaker-0.12.jar" />
+  </library>
+  <library name="Maven: com.github.mifmif:generex:1.0.2">
+    <archive path="/Users/olivernybroe/.m2/repository/com/github/mifmif/generex/1.0.2/generex-1.0.2.jar" />
+  </library>
+  <library name="Maven: dk.brics.automaton:automaton:1.11-8">
+    <archive path="/Users/olivernybroe/.m2/repository/dk/brics/automaton/automaton/1.11-8/automaton-1.11-8.jar" />
+  </library>
+  <library name="Maven: junit:junit:4.12">
+    <archive path="/Users/olivernybroe/.m2/repository/junit/junit/4.12/junit-4.12.jar" />
+  </library>
+  <library name="Maven: mysql:mysql-connector-java:6.0.5">
+    <archive path="/Users/olivernybroe/.m2/repository/mysql/mysql-connector-java/6.0.5/mysql-connector-java-6.0.5.jar" />
+  </library>
+  <library name="Maven: org.apache.commons:commons-lang3:3.5">
+    <archive path="/Users/olivernybroe/.m2/repository/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar" />
+  </library>
+  <library name="Maven: org.assertj:assertj-core:3.6.2">
+    <archive path="/Users/olivernybroe/.m2/repository/org/assertj/assertj-core/3.6.2/assertj-core-3.6.2.jar" />
+  </library>
+  <library name="Maven: org.hamcrest:hamcrest-core:1.3">
+    <archive path="/Users/olivernybroe/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" />
+  </library>
   <library name="UserDAODiscImplementation">
     <archive path="/Users/olivernybroe/Google Drive/Code/DTU/02324/CDIO1/UserDAODiscImplementation.jar" />
   </library>
